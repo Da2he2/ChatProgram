@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        function newXhr(){
+            var xhr = false;
+            if(window.XMLHttpRequest){
+                xhr = new XMLHttpRequest();
+            }
+            else if(window.ActiveXObject){
+                xhr = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            return xhr;
+        }
+
+        ///////////////////////////////////////////////////////////////
+        
+        let chatScreen;
+        let chatmyname;
+        let chatInput;
+        let chatnameScreen;
+        let msgCount = 0;
+        let nameCount = 0;
+        let chatroomname;
+        var audio = new Audio('Music.mp3'); 
+
+        function play(){
+                var audio = document.getElementById("audio");
+                audio.play();
+        }
+
+        function sendName(){
+            let name = chatmyname.value;
+            console.log('!'+name+'!');
+            let xhr = newXhr();
+            xhr.open("GET","sendName?name="+name);
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    chatnameScreen.value += name;
+                    nameCount++;
+                }
+            }
+            xhr.send(null);
+        }
+
+        function sendMessage(){
+            let msg = chatInput.value;
+            //send message to server
+            let xhr = newXhr();
+            xhr.open("GET","sendMessage?msg="+msg);
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    chatScreen.value += msg+"\n";
+                    msgCount++;
+                }
+            }
+            xhr.send(null);
+        }
+
+        function getNewMessage(){
+            let xhr = newXhr();
+            xhr.open("GET","getNewMessage?msgCount="+msgCount);
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    var msgs = JSON.parse(xhr.responseText);
+                    for(let i = 0;i<msgs.length;i++){
+                        chatScreen.value +=msgs[i]+"\n";
+                    }
+                    msgCount+=msgs.length;
+                }
+                
+            }
+            xhr.send(null);
+        }
+
+        function getName(){
+            let xhr = newXhr();
+            xhr.open("GET","getName?nameCount="+nameCount);
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    var names = JSON.parse(xhr.responseText);
+                        for(let i =0;i<names.length;i++){
+                            chatnameScreen.value += names[i]+'\n';
+                        }  
+                        nameCount+=names.length;     
+                    }
+                }
+            xhr.send(null);
+        }
+
+
+        window.onload = function(){
+            chatnameScreen = document.querySelector("#chatnameScreen");        //이름 아웃풋
+            chatmyname = document.querySelector("#chattingmyname");            //이름 인풋
+            chatScreen = document.querySelector("#chatScreen");                //메세지 아웃풋
+            chatInput = document.querySelector("#input");                      //메세지 인풋
+            chatroomname = document.querySelector("#chatroomname");            //채팅방이름 아웃풋
+            setInterval(getName,2000);
+            setInterval(getNewMessage,2000);
+            chatname();
+        }
+
+        function chatname(){                //채팅방
+            var chat_name = prompt("채팅방의 이름을 입력해주세요", "");
+            alert(chat_name+"의 채팅방에 오신 것을 환영합니다. ");
+            chatroomname.innerText = `${chat_name}`;
+        }
+
+        function enterKey(){                 //엔터키 누를시 이름과 메세지 전송
+            if(event.keyCode==13){
+                sendName();
+                sendMessage();
+            }
+        }
+
+        function spring(){                       //봄
+            var button_s = document.getElementsByClassName('_button');
+            for(var i = 0;i<5;i++){
+                button_s[i].style.backgroundColor = "rgb(132,132,34)";
+            }
+
+            var bgd = document.getElementById('backgrd');
+            bgd.style.backgroundColor = "rgb(64,79,22)";
+
+            var _chatroomname = document.getElementById('chatroomname');
+            _chatroomname.style.backgroundColor = "rgb(254,193,77)";
+
+            var cn_screen = document.getElementsByClassName('screen_cn');
+            cn_screen[0].style.backgroundColor = "rgb(254,237,191)";
+            cn_screen[1].style.backgroundColor = "rgb(254,237,191)";
+
+            var cn_input = document.getElementsByClassName('input_cn');
+            cn_input[0].style.backgroundColor="rgb(255,222,143)";
+            cn_input[1].style.backgroundColor="rgb(255,222,143)";
+        }
+
+        function summer(){                     //여름
+            var button_s = document.getElementsByClassName('_button');
+            for(var i = 0;i<5;i++){
+                button_s[i].style.backgroundColor = "rgb(0,102,203)";
+            }
+
+            var bgd = document.getElementById('backgrd');
+            bgd.style.backgroundColor = "rgb(1,50,108)";
+
+            var _chatroomname = document.getElementById('chatroomname');
+            _chatroomname.style.backgroundColor = "rgb(140,211,255)";
+
+            var cn_screen = document.getElementsByClassName('screen_cn');
+            cn_screen[0].style.backgroundColor = "rgb(222,235,247)";
+            cn_screen[1].style.backgroundColor = "rgb(222,235,247)";
+
+            var cn_input = document.getElementsByClassName('input_cn');
+            cn_input[0].style.backgroundColor = "rgb(71,161,247)";
+            cn_input[1].style.backgroundColor = "rgb(71,161,247)";
+        }
+
+        function fall(){                     //가을
+            var button_s = document.getElementsByClassName('_button');
+            for(var i = 0;i<5;i++){
+                button_s[i].style.backgroundColor = "rgb(140,42,39)";
+            }
+
+            var bgd = document.getElementById('backgrd');
+            bgd.style.backgroundColor = "rgb(199,69,53)";
+
+            var _chatroomname = document.getElementById('chatroomname');
+            _chatroomname.style.backgroundColor = "rgb(132,60,12)";
+
+            var cn_screen = document.getElementsByClassName('screen_cn');
+            cn_screen[0].style.backgroundColor = "rgb(251,229,214)";
+            cn_screen[1].style.backgroundColor = "rgb(251,229,214)";
+
+            var cn_input = document.getElementsByClassName('input_cn');
+            cn_input[0].style.backgroundColor="rgb(226,141,120)";
+            cn_input[1].style.backgroundColor="rgb(226,141,120)";
+        }
+
+        function winter(){                 //겨울 
+            var button_s = document.getElementsByClassName('_button');
+            for(var i = 0;i<5;i++){
+                button_s[i].style.backgroundColor = "rgb(51,63,89)";
+            }
+
+            var bgd = document.getElementById('backgrd');
+            bgd.style.backgroundColor = "rgb(21,25,28)";
+
+            var _chatroomname = document.getElementById('chatroomname');
+            _chatroomname.style.backgroundColor = "rgb(118,113,113)";
+
+            var cn_screen = document.getElementsByClassName('screen_cn');
+            cn_screen[0].style.backgroundColor = "rgb(226,221,209)";
+            cn_screen[1].style.backgroundColor = "rgb(226,221,209)";
+
+            var cn_input = document.getElementsByClassName('input_cn');
+            cn_input[0].style.backgroundColor="rgb(166,173,186)";
+            cn_input[1].style.backgroundColor="rgb(166,173,186)";
+        }
+                //오디오
+    </script>
+</head>
+<body>
+    <div id="backgrd">
+        <div id="all">
+            <div id="chatroomname"></div>
+            <div id="screen">
+                <textarea class="screen_cn" id="chatnameScreen" rows="20" cols="7"></textarea>
+                <textarea class="screen_cn" id="chatScreen" rows="20" cols="40"></textarea> 
+                <div id="buttons">
+                    <input type="button" class="_button" id="spring" value="봄" onclick="spring();"style="margin-top: 40px;"> <br />
+                    <input type="button" class="_button" id="summer" value="여름" onclick="summer();"style="margin-top: 40px;"> <br />
+                    <input type="button" class="_button" id="fall" value="가을" onclick="fall();"style="margin-top: 40px;"> <br />
+                    <input type="button" class="_button" id="winter" value="겨울" onclick="winter();"style="margin-top: 40px;">
+                </div>
+            </div>
+            <div id="inputLine">
+                <input type="text" class="input_cn" id="chattingmyname" onKeyPress="enterKey()">
+                <input type="text" class="input_cn" id="input" onKeyPress="enterKey()"/>
+                <input type="button" class="_button" id="send" value="전송" onclick="sendName();sendMessage();" />
+            </div>
+            <audio src = "Music.mp3" autoplay controls style="writing-mode: vertical-rl;text-orientation: mixed;"></audio>
+        </div>
+    </div>
+</body>
+</html>
